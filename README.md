@@ -10,9 +10,9 @@ The **Example** provides an example for using the three poposed methods to estim
 
 The **Functions.R** provides the functions needed to be applied when using our proposed methods.
 
-* WS_WD_ND.RData
+* Data
 
-An example data set to wich our proposed method can be applied. It contains daily average of wind speed and wind direction from the CanRCM climate model output at one of the locations of our interest. 
+**WS_WD_ND.RData** is an example data set to wich our proposed method can be applied. It contains daily average of wind speed and wind direction from the CanRCM climate model output at one of the locations of our interest. 
 
 * Supplementary Material
 
