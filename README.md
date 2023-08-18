@@ -13,7 +13,3 @@ The **Functions.R** provides the functions needed to be applied when using our p
 * Data
 
 **WS_WD_ND.RData** is an example data set to wich our proposed method can be applied. It contains daily average of wind speed and wind direction from the CanRCM climate model output at one of the locations of our interest. 
-
-* Supplementary Material
-
-Contains the supplemanetary material pertaining to the manuscript.
