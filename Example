@@ -13,11 +13,15 @@ n.knots = 30 ## no. of knots for eq.frequency bins
 # Bin the wind direction data, fit a PP in each bin and save the ML estimates of the parameters
 bin.param.pp = binned.pp.step1(WD = WD, WS = WS, type = type, width = width,
                                n.knots = NULL, th = th) ## Equal width bins use ew.bin; equal frequency bins use ef.bin.
+# Specify the number of fourier series to use for each parameter
+K = c(4,2,1)
 # Construct the Fourier series
-X.median.pp = X.median.func(WD, 1, type = type, width = width,
-                            n.knots = n.knots)
+X.median.sum.pres.pp.loc = X.median.func(WD = c(ND.wd.sum.pres) , K = K[1], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.pp.scale = X.median.func(WD = c(ND.wd.sum.pres) , K = K[2], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.pp.shape = X.median.func(WD = c(ND.wd.sum.pres) , K = K[3], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.pp = list(X.median.sum.pres.pp.loc, X.median.sum.pres.pp.scale, X.median.sum.pres.pp.shape)
 # Regress the parameter estimates on wind direction and compute the return levels (RLs)
-RL.pp.est.ew.bin.ND = binned.pp.step2(bin.param.pp, X.median.pp, K=1)
+RL.pp.est.ew.bin.ND = binned.pp.step2(bin.param.pp, X.median.sum.pres.pp, K=K)
 
 ### GPD
 # Define the threshold
@@ -28,35 +32,63 @@ WS = c(ND.ws.sum.pres)
 # Choose the binning method
 type = "ef.bin" ## equal width bin
 width = NULL ## width of the bin in degrees
-n.knots = 30 ## no. of knots for eq.frequency bins
+n.knots = 20 ## no. of knots for eq.frequency bins
 # Bin the wind direction data, fit a PP in each bin and save the ML estimates of the parameters
 binned.param.gpd = binned.gpd.step1(WD = WD, WS = WS, type = type, width = width,
                                     n.knots = n.knots, th = th)
+# Specify the number of fourier series to use for each parameter
+K = c(1,1)
 # Construct the Fourier series
-X.median.gpd = X.median.func(WD, 1, type = type, width = width,
-                             n.knots = n.knots)
+X.median.sum.pres.gpd.scale = X.median.func(WD = c(ND.wd.sum.pres) , K = K[1], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gpd.shape = X.median.func(WD = c(ND.wd.sum.pres) , K = K[2], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gpd = list(X.median.sum.pres.gpd.scale, X.median.sum.pres.gpd.shape)
 # Regress the parameter estimates on wind direction and compute the return levels (RLs)
 RL.gpd.est.ew.bin.ND = binned.gpd.step2(binned.param = binned.param.gpd, 
-                                        X.median = X.median.gpd, K = 1)
-
+                                        X.median = X.median.sum.pres.gpd, K = K)
 
 ### GEV
 # Organize data in a matrix where each column represents an year
 WD = ND.wd.sum.pres
 WS = ND.ws.sum.pres
-# Define the number of years
-nyears = 55
 # Define the parameters for binning
 type = "ef.bin"
 width = NULL
-n.knots = 30
+n.knots = 18
 # Bin the wind direction data, fit a PP in each bin and save the ML estimates of the parameters
 binned.param.gev = binned.gev.step1(WD = WD, WS = WS, type = type, 
                                     width = width,
                                     n.knots = n.knots )
+# Specify the number of fourier series to use for each parameter
+K = c(6,4,1)
 # Construct the Fourier series
-X.median.gev = X.median.func(WD = c(WD), K = 1, type =type, width = width, n.knots = n.knots)
+X.median.sum.pres.gev.loc = X.median.func(WD = c(ND.wd.sum.pres) , K = K[1], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gev.scale = X.median.func(WD = c(ND.wd.sum.pres) , K = K[2], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gev.shape = X.median.func(WD = c(ND.wd.sum.pres) , K = K[3], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gev = list(X.median.sum.pres.gev.loc, X.median.sum.pres.gev.scale, X.median.sum.pres.gev.shape)
 # Regress the parameter estimates on wind direction and compute the return levels (RLs)
 RL.gev.est.ew.bin.ND = binned.gev.step2(binned.param = binned.param.gev,
-                                        X.median = X.median.gev,
-                                        K = 1)
+                                        X.median = X.median.sum.pres.gev,
+                                        K = K)
+
+### Gumbel
+# Organize data in a matrix where each column represents an year
+WD = ND.wd.sum.pres
+WS = ND.ws.sum.pres
+# Define the parameters for binning
+type = "ef.bin"
+width = NULL
+n.knots = 18
+# Bin the wind direction data, fit a PP in each bin and save the ML estimates of the parameters
+binned.param.gum = binned.gum.step1(WD = WD, WS = WS, type = type, 
+                                    width = width,
+                                    n.knots = n.knots )
+# Specify the number of fourier series to use for each parameter
+K = c(6,4)
+# Construct the Fourier series
+X.median.sum.pres.gum.loc = X.median.func(WD = c(ND.wd.sum.pres) , K = K[1], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gum.scale = X.median.func(WD = c(ND.wd.sum.pres) , K = K[2], type = type, width = width, n.knots = n.knots)
+X.median.sum.pres.gum = list(X.median.sum.pres.gum.loc, X.median.sum.pres.gum.scale)
+# Regress the parameter estimates on wind direction and compute the return levels (RLs)
+RL.gev.est.ew.bin.ND = binned.gum.step2(binned.param = binned.param.gum,
+                                        X.median = X.median.sum.pres.gum,
+                                        K = K)
